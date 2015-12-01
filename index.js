@@ -23,7 +23,7 @@ var A = 'air';
 
 var level1 = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -45,7 +45,7 @@ var level1 = [
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, S, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, S, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ];
 
@@ -334,7 +334,7 @@ var level11 = [
 
 
 
-var signText = ["    Welcome to *instert title*! \n  Read signs along the way to\n    help you progress through \n levels! Pink blocks are portals\n they take you to the next level!", "\n    Falling from high platforms\n           does not hurt you!", "You float in water! \nUse it to your advantage!\npress the down arrow key to\nswim downward!", "Lava is not as helpful as water...\nHit lava and you will imediately\ndie! DONT DIE!", "This is the last level of training!\n  Pass this level and head on to \n the first world! If you get stuck \n in a level, press the \"r\" key and \n     you will restart the level.", "   Welcome to the earth world!\n  Here on earth, there is a lot of\n water, and not very much lava.\nRemember that \"r\" restarts each\n                      level!", "Consider yourself stuck! \nPress\"r\"", "8", "Oh! I cant believe i forgot to \nmention portals! I will let you\nfigure out how they work...\nWARNING! they are always \nbright blue!", "ALL TOGETHER NOW!\nbeat this level and move on to \nthe underwater world!\noh, and are you dizzy yet?", "Welcome to water world! \nIn this world, you float \neverywhere! Lava is very scarce.\nThere is water in this world...\nnormally under pockets of rock."];
+var signText = ["Welcome to *instert title*! Read signs along the way to help you progress through levels! Pink blocks are portals they take you to the next level!", "Falling from high platforms does not hurt you!", "You float in water! \nUse it to your advantage!\npress the down arrow key to\nswim downward!", "Lava is not as helpful as water...\nHit lava and you will imediately\ndie! DONT DIE!", "This is the last level of training!\n  Pass this level and head on to \n the first world! If you get stuck \n in a level, press the \"r\" key and \n     you will restart the level.", "   Welcome to the earth world!\n  Here on earth, there is a lot of\n water, and not very much lava.\nRemember that \"r\" restarts each\n                      level!", "Consider yourself stuck! \nPress\"r\"", "8", "Oh! I cant believe i forgot to \nmention portals! I will let you\nfigure out how they work...\nWARNING! they are always \nbright blue!", "ALL TOGETHER NOW!\nbeat this level and move on to \nthe underwater world!\noh, and are you dizzy yet?", "Welcome to water world! \nIn this world, you float \neverywhere! Lava is very scarce.\nThere is water in this world...\nnormally under pockets of rock."];
 
 var levels = [level1, level2, level3, level4, level5, level6, level7, level8, level9, level10, level11];
 //var test = 0;
@@ -504,24 +504,69 @@ var airWall = function(x, y, w) {
 var keys = [];
 
 
+function todo(ctx, text, fontSize, fontColor) {
+    var max_width  = 200;
+    var fontSize   =  12;
+    var lines      =  new Array();
+    var width = 0, i, j;
+    var result;
+    var color = fontColor || "white";
+
+    // Font and size is required for ctx.measureText()
+    ctx.font   = fontSize + "px Arial";
+
+    
+
+    // Start calculation
+    while ( text.length ) {
+        for( i=text.length; ctx.measureText(text.substr(0,i)).width > max_width; i-- );
+    
+        result = text.substr(0,i);
+    
+        if ( i !== text.length )
+            for( j=0; result.indexOf(" ",j) !== -1; j=result.indexOf(" ",j)+1 );
+        
+        lines.push( result.substr(0, j|| result.length) );
+        width = Math.max( width, ctx.measureText(lines[ lines.length-1 ]).width );
+        ctx.textAlign="center"; 
+        text  = text.substr( lines[ lines.length-1 ].length, text.length );
+    }
+    
+    
+    // Calculate canvas size, add margin
+    //ctx.canvas.width  = 14 + width;
+    //ctx.canvas.height =  8 + ( fontSize + 5 ) * lines.length;
+    ctx.font   = fontSize + "px Arial";
+
+    // Render
+    ctx.fillStyle = color;
+    for ( i=0, j=lines.length; i<j; ++i ) {
+        ctx.fillText( lines[i], 200, 60 + fontSize + (fontSize+5) * i );
+    }
+}
+
+
 
 var sign = function(x, y, w, txt) {
     ctx.fillStyle = "brown";
     ctx.fillRect(x, y, w, 1 / 2 * w);
     ctx.fillRect(x + 2 / 5 * mapBlockSize, y + 1 / 2 * mapBlockSize, 1 / 5 * mapBlockSize, 1 / 2 * mapBlockSize);
-    ctx.fillStyle = "brown";
+    //ctx.fillStyle = "purple";
     ctx.fillRect(x + 1 / 16 * mapBlockSize, y + 1 / 16 * mapBlockSize, w - (1 / 8 * w), 1 / 2 * w - (1 / 8 * w));
 
     if (player1.x + player1.size > x && player1.x < x + w && player1.y + player1.size > y && player1.y < y + w) {
         ctx.fillStyle = "brown";
         ctx.fillRect(mapBlockSize * 5, mapBlockSize * 3, mapBlockSize * 15, mapBlockSize * 7);
         ctx.fillRect(mapBlockSize * 12, mapBlockSize * 10, mapBlockSize * 1, mapBlockSize * 7);
-        ctx.fillStyle = "brown";
+        ctx.fillStyle = "white";
         ctx.fillRect(mapBlockSize * 5.5, mapBlockSize * 3.5, mapBlockSize * 14, mapBlockSize * 6);
         ctx.fillStyle = "black";
         //textSize(mapBlockSize);
         //textFont(signTxt,20);
-        ctx.fillText(txt, mapBlockSize * 6, mapBlockSize * 4.5);
+        //ctx.fillText(txt, mapBlockSize * 6, mapBlockSize * 4.5);
+
+    todo(ctx, txt, 12, "black");
+
     }
 
 
@@ -708,7 +753,7 @@ mousePressed = function(){
 
                     case 5:
                         {
-                            ctx.fillStyle = "black";
+                            ctx.fillStyle = "#ff3399";
                             portalWall(x * mapBlockSize, y * mapBlockSize, mapBlockSize);
                         } //portal
                         break;
@@ -721,14 +766,14 @@ mousePressed = function(){
 
                     case G:
                         {
-                            ctx.fillStyle = "#00AA33";
+                            ctx.fillStyle = "#009900";
                             wall(x * mapBlockSize, y * mapBlockSize, mapBlockSize);
                         } //regular green block
                         break;
 
                     case R:
                         {
-                            ctx.fillStyle = "brown";
+                            ctx.fillStyle = "#ff0000";
                             wall(x * mapBlockSize, y * mapBlockSize, mapBlockSize);
                         } //regular red block
                         break;
@@ -749,28 +794,28 @@ mousePressed = function(){
 
                     case Y:
                         {
-                            ctx.fillStyle = "yellow";
+                            ctx.fillStyle = "#ffff00";
                             wall(x * mapBlockSize, y * mapBlockSize, mapBlockSize);
                         } //regular yellow block
                         break;
 
                     case P:
                         {
-                            ctx.fillStyle = "brown";
+                            ctx.fillStyle = "#990099";
                             wall(x * mapBlockSize, y * mapBlockSize, mapBlockSize);
                         } //regular purple block
                         break;
 
                     case B:
                         {
-                            ctx.fillStyle = "blue";
+                            ctx.fillStyle = "#0000ff";
                             wall(x * mapBlockSize, y * mapBlockSize, mapBlockSize);
                         } //regular blue block
                         break;
 
                     case T:
                         {
-                            ctx.fillStyle = "#00DD99";
+                            ctx.fillStyle = "#00ffff";
 
                         } //teleport block
                         break;
@@ -789,6 +834,9 @@ mousePressed = function(){
 
             }
         }
+
+
+
 
 
 
